@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace SerialToTcpRelay
 {
-    internal class DummySerialComm : ISerialComm
+    public class DummySerialComm : ISerialComm
     {
         public event SerialCommDataReceivedEventHandler DataReceived;
         Random rand0;

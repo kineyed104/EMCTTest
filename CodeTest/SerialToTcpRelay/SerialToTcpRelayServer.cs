@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SerialToTcpRelay
 {
-    internal class SerialToTcpRelayServer<T> where T : ISerialComm
+    public class SerialToTcpRelayServer<T> where T : ISerialComm
     {
         private ISerialComm SerialPort;
         private Socket serverSocket;
