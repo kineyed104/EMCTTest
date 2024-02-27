@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -38,7 +39,6 @@ namespace SerialToTcpRelay
             acceptThread.Start();
         }
 
-
         private void AcceptClient()
         {
             while (running)
@@ -47,12 +47,9 @@ namespace SerialToTcpRelay
                 {
                     var clientSocket = serverSocket.Accept();
                     var ipEndpoint = (IPEndPoint)clientSocket.RemoteEndPoint;
-                        Thread clientThread = new Thread(ClientHandler);
-                        clientThread.Start();
+                    Thread clientThread = new Thread(new ParameterizedThreadStart(ClientHandler));
+                    clientThread.Start(clientSocket);
                     clientSockets.TryAdd(clientSocket, clientThread);
-                    }
-
-                    await Task.Delay(10);
                 }
                 catch (SocketException ex)
                 {
@@ -63,15 +60,16 @@ namespace SerialToTcpRelay
 
         private void ClientHandler(object obj)
         {
+            var clientSocket = (Socket)obj;
             byte[] buffer = new byte[1024];
-            while (running && clientSocket != null && clientSocket.Connected)
+            while (running && clientSocket.Connected)
             {
                 try
                 {
                     int bytesRead = clientSocket.Receive(buffer);
                     if (bytesRead > 0)
                     {
-                        var bytes = new ArraySegment<byte>(buffer,0, bytesRead).ToArray();
+                        var bytes = new ArraySegment<byte>(buffer, 0, bytesRead).ToArray();
                         SerialPort.Send(bytes);
                     }
                 }
@@ -83,15 +81,11 @@ namespace SerialToTcpRelay
             }
 
             RemoveClientSocket(clientSocket);
-            }
-
-            clientSocket = null; 
         }
 
         private void SerialPort_DataReceived(ISerialComm serialComm, byte[] data)
         {
-            if (clientSocket != null && clientSocket.Connected)
-            if (clientSockets != null && clientSockets.Count > 0)
+            if (clientSockets.Count > 0)
             {
                 foreach (var clientSocketPair in clientSockets)
                 {
@@ -104,17 +98,17 @@ namespace SerialToTcpRelay
         }
 
         private void SendToSocket(Socket clientSocket, byte[] data)
+        {
+            try
             {
-                try
-                {
-                    clientSocket.Send(data);
-                }
-                catch (SocketException ex)
-                {
-                    LogWrite($"ClientSocket Failed to send. {ex.ToString()}");
-                RemoveClientSocket(clientSocket);
-                }
+                clientSocket.Send(data);
             }
+            catch (SocketException ex)
+            {
+                LogWrite($"ClientSocket Failed to send. {ex.ToString()}");
+                RemoveClientSocket(clientSocket);
+            }
+        }
 
         private void RemoveClientSocket(Socket clientSocket)
         {
@@ -131,7 +125,7 @@ namespace SerialToTcpRelay
             if (clientSockets != null)
             {
                 foreach (var clientSocketPair in clientSockets)
-            {
+                {
                     clientSocketPair.Key.Close();
                 }
 
