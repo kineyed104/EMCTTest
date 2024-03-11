@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialToTcpRelay", "SerialT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialToTcpRelayClient", "SerialToTcpRelayClient\SerialToTcpRelayClient.csproj", "{1F2E9CBB-8504-4579-9016-8A8FC9A0E5A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialToTcpRelayTest", "SerialToTcpRelayTest\SerialToTcpRelayTest.csproj", "{CF592A67-49A1-4D1F-A0E6-BD5A46CBC8E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1F2E9CBB-8504-4579-9016-8A8FC9A0E5A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F2E9CBB-8504-4579-9016-8A8FC9A0E5A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F2E9CBB-8504-4579-9016-8A8FC9A0E5A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF592A67-49A1-4D1F-A0E6-BD5A46CBC8E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF592A67-49A1-4D1F-A0E6-BD5A46CBC8E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF592A67-49A1-4D1F-A0E6-BD5A46CBC8E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF592A67-49A1-4D1F-A0E6-BD5A46CBC8E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
